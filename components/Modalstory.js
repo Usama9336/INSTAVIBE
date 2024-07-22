@@ -11,6 +11,7 @@ import { addDoc, collection,serverTimestamp, updateDoc } from 'firebase/firestor
 import { signIn,signOut,useSession } from 'next-auth/react'
 import { getDownloadURL, ref, uploadString } from 'firebase/storage'
 import images from '@/assets/images.png'
+import { useAuth } from '@/context/AuthContext'
 //import { useRef } from 'react'
 export default function MyModalstory() {
   const {data:session}=useSession();
@@ -28,12 +29,15 @@ function openModal() {
   setIsOpen(true)
 }
 const [loading, setloading] = useState(false)
+
+const currentUser=useAuth();
+
 //create data post and add it to firebase collection
 const uploadpost=async()=>{
   setloading(true);
 const docRef=await addDoc(collection(db,'story'),{
-profileimg:session?.user?.image,
-  username:session?.user?.name,
+profileimg:currentUser?.photoURL,
+  username:currentUser?.displayName,
   caption:captionRef.current.value,
   timestamp:serverTimestamp(),
 });
@@ -94,8 +98,8 @@ return (
                   >
                    {(image ?
                     <div className="flex gap-2 items-center">
-                        <img src={session?.user?.image} alt="" className='w-[3rem] h-[3rem]'/>
-                        <p>{session?.user?.name}</p>
+                        <img src={currentUser?.photoURL} alt="" className='w-[3rem] h-[3rem]'/>
+                        <p>{currentUser?.displayName}</p>
                     </div>
                     :"Create New Story" ) }
                   </Dialog.Title>

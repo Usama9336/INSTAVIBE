@@ -18,11 +18,11 @@ export default function Firstpage() {
     <div className="flex flex-col items-center mt-[1rem] sm:flex sm:flex-col sm:items-center sm:mt-[3rem]">
      <div className="text-center shadow-2xl rounded-[6px] p-[1.5rem] mt-[-2.8rem] duration-500">
       <div className="w-[19rem] h-[6rem]">
-        <img src={currentUser.photoURL} className="mt-[1rem] hover:scale-[90%] duration-500 rounded-full mx-[6.5rem]" alt=""/>
+        <img src={currentUser?.photoURL} className="mt-[1rem] hover:scale-[90%] duration-500 rounded-full mx-[6.5rem]" alt=""/>
       </div>
       <div className='flex text-lg font-semibold gap-2 items-center mx-[4.5rem]'>
       <p>Hey !</p>
-       <p>{currentUser.displayName}</p>
+       <p>{currentUser?.displayName}</p>
       </div>
       <div className=" font-semibold font-style:italic">
         <p>This is My first Web Application

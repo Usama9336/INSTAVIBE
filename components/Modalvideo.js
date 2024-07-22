@@ -15,6 +15,7 @@ import { signIn,signOut,useSession } from 'next-auth/react'
 import { getDownloadURL, ref, uploadString } from 'firebase/storage'
 import { Modalstatevideo } from '@/atoms/Modalstatevideo'
 import ReactPlayer from 'react-player'
+import { useAuth } from '@/context/AuthContext'
 //import { useRef } from 'react'
 export default function MyModal() {
   const {data:session}=useSession();
@@ -22,7 +23,7 @@ export default function MyModal() {
 const captionRef=useRef(null); 
 const imageRef=useRef(null);
 const [video, setvideo] = useState(null);
- 
+ const currentUser=useAuth();
 function closeModal() {
   setIsOpen(false)
   setvideo('')
@@ -36,8 +37,8 @@ const [loading, setloading] = useState(false)
 const uploadpost=async()=>{
   setloading(true);
 const docRef=await addDoc(collection(db,'posts'),{
-profileimg:session?.user?.image,
-  username:session?.user?.name,
+profileimg:currentUser?.photoURL,
+  username:currentUser?.displayName,
  caption:captionRef.current.value,
   timestamp:serverTimestamp(),
 });
