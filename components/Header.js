@@ -5,19 +5,17 @@ import homeone from '@/assets/home.png';
 import send from '@/assets/send.png';
 import heart from '@/assets/heart.png';
 import video from '@/assets/video.png';
-import {CgAddR, CgInstagram, CgProfile} from "react-icons/cg"
-import heart1 from '@/assets/heart1.png';
-import bookmark from '@/assets/bookmark.png';
-import { Modalstate } from '@/atoms/Modalstate';
-import { useRecoilState } from 'recoil';
+import { CgAddR, CgInstagram, CgProfile } from "react-icons/cg";
 import { TfiSearch } from "react-icons/tfi";
-import { useAuth } from '@/context/AuthContext';
+import { useRecoilState } from 'recoil';
 import { orderBy, onSnapshot, query, collection } from 'firebase/firestore';
-import { db } from '@/Firebase';
-import { Modalstatestory } from '@/atoms/Modalstatestory';
-import { useRouter } from "next/router";
+import { useAuth } from '@/context/AuthContext';
+import { auth, db } from '@/Firebase';
+import { Modalstate } from '@/atoms/Modalstate';
 import { Modalstatechat } from '@/atoms/Modalstatechat';
 import { Modalstatevideo } from '@/atoms/Modalstatevideo';
+import { useRouter } from "next/router";
+import { signOut } from "firebase/auth";
 
 export default function Header() {
   const [open, setopen] = useRecoilState(Modalstate);
@@ -27,7 +25,7 @@ export default function Header() {
   const router = useRouter();
 
   // Use the custom auth hook
-  const { currentUser, signOut } = useAuth();
+  const { currentUser } = useAuth();
 
   // Displaying comments
   useEffect(() => {
@@ -39,6 +37,15 @@ export default function Header() {
   }, [db]);
 
   const len = Comments.length;
+
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      router.push('/'); // Redirect to home page after sign-out
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
 
   return (
     <div className='border-b shadow-sm bg-white sticky top-0 z-10'>
@@ -80,9 +87,7 @@ export default function Header() {
             <div className='btn mr-2 mt-[3px] ml-[-7px]'>
               <img src={currentUser?.photoURL} alt="" className='rounded-full hover:scale-[80%] duration-500' />
             </div>
-            <div className='cursor-pointer text-[#0095f6] font-semibold whitespace-nowrap hover:scale-[80%] duration-500' onClick={() => {
-              router.push("/"); // Redirect after sign out
-            }}>
+            <div className='cursor-pointer text-[#0095f6] font-semibold whitespace-nowrap hover:scale-[80%] duration-500' onClick={handleSignOut}>
               Sign out
             </div>
           </div>
